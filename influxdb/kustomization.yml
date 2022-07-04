@@ -4,9 +4,9 @@ kind: Kustomization
 resources:
   - deployment.yml
   - service.yml
-
+  - secret_influx_admin.yaml
 patchesStrategicMerge:
   - ./patches/container-env.yml
   - ./patches/container-image.yml
   - ./patches/container-resource.yml
-  - ./patches/replica.yml
+  - ./patches/replica.yml 
