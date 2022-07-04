@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yml
+  - service.yml
+
+patchesStrategicMerge:
+  - ./patches/container-env.yml
+  - ./patches/container-image.yml
+  - ./patches/container-resource.yml
+  - ./patches/replica.yml

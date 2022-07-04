@@ -1,0 +1,28 @@
+# Desactivado.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+spec:
+  template:
+    spec:
+      volumes:
+        - name: influxdb-data
+          persistentVolumeClaim:
+            claimName: synthetix-pro-pvc-1
+        - name: iometrics-selfsigned-crt
+          secret:
+            secretName: iometrics-selfsigned-crt
+      containers:
+        - name: influxdb
+          volumeMounts:
+            - mountPath: "/var/lib/influxdb"
+              name: influxdb-data
+            - name: iometrics-selfsigned-crt
+              mountPath: /etc/influxdb/tls/tls.crt
+              readOnly: true
+              subPath: tls.crt
+            - name: iometrics-selfsigned-crt
+              mountPath: /etc/influxdb/tls/tls.key
+              readOnly: true
+              subPath: tls.key

@@ -6,12 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    path: deploys
+    path: influxdb
     repoURL: https://github.com/joseeetm/argo-kustomize
     targetRevision: master
   destination:
     server: https://kubernetes.default.svc
-    namespace: web
+    namespace: influx
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
