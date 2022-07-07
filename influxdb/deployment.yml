@@ -5,6 +5,7 @@ metadata:
   labels:
     app: influxdb
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: influxdb
@@ -15,8 +16,74 @@ spec:
     spec:
       containers:
         - name: influxdb
+          image: eu.gcr.io/dd-gke-noprod/influxdb:1.8.4        
           ports:
             - containerPort: 8086
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "10m"
+            limits:
+              memory: "8Gi"
+              cpu: "1000m"
+          env:
+            - name: INFLUXDB_HTTP_AUTH_ENABLED
+              value: "true"
+            - name: INFLUXDB_REPORTING_DISABLED
+              value: "true"
+            - name: INFLUXDB_BIND_ADDRESS
+              value: "0.0.0.0:8088"
+            - name: "INFLUXDB_META_LOGGING_ENABLED"
+              value: "true"
+            - name: "INFLUXDB_DATA_INDEX_VERSION"
+              value: "tsi1"
+            - name: "INFLUXDB_DATA_QUERY_LOG_ENABLED"
+              value: "true"
+            - name: "INFLUXDB_HTTP_FLUX_ENABLED"
+              value: "true"
+            - name: "INFLUXDB_HTTP_LOG_ENABLED"
+              value: "true"
+            - name: "INFLUXDB_LOGGING_SUPPRESS_LOGO"
+              value: "true"
+            - name: INFLUXDB_ADMIN_USER
+              value: "iometrics"
+            - name: INFLUXDB_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: influxdb-admin-credentials
+                  key: password
+            # - name: INFLUXDB_SYNTHETIX_UI_USER
+            #   value: "synthetix-ui"
+            # - name: INFLUXDB_SYNTHETIX_UI_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: influxdb-syui-credentials
+            #       key: password
+            # - name: INFLUXDB_SYNTHETIX_UI_DATABASE
+            #   value: "_syui" 
+#             - name: INFLUXDB_SONDAS_USER
+#               value: "sondas"
+#             - name: INFLUXDB_SONDAS_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: influxdb-sondas-credentials
+#                   key: password
+#             - name: INFLUXDB_TELEGRAF_USER
+#               value: telegraf
+#             - name: INFLUXDB_TELEGRAF_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: influxdb-telegraf-credentials
+#                   key: password
+#             - name: INFLUXDB_SYNTHETIX_MANAGER_USER
+#               value: synthetix_manager
+#             - name: INFLUXDB_SYNTHETIX_MANAGER_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: influxdb-sym-credentials
+#                   key: password
+#             - name: INFLUXDB_SYNTHETIX_MANAGER_DATABASE
+#               value: "_sym"                 
       securityContext:
         runAsGroup: 999
         runAsUser: 999
